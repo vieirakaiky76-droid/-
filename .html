@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Date App</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#a80000,#ff2e2e);
+}
+
+.card{
+    background:white;
+    width:90%;
+    max-width:420px;
+    padding:25px;
+    border-radius:25px;
+    box-shadow:0 20px 50px rgba(0,0,0,.3);
+    text-align:center;
+}
+
+h1,h2{margin-bottom:20px;}
+
+button{
+    padding:15px;
+    border:none;
+    border-radius:14px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.btn-sim{
+    background:#ff2e2e;
+    color:white;
+    margin:10px;
+}
+
+.btn-nao{
+    background:#eee;
+    margin:10px;
+}
+
+.btn-next{
+    width:100%;
+    background:#ff2e2e;
+    color:white;
+    margin-top:20px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    font-size:18px;
+    border-radius:12px;
+    border:none;
+    background:#f3f3f3;
+}
+
+.option{
+    background:#f3f3f3;
+    padding:15px;
+    border-radius:12px;
+    margin:10px 0;
+    cursor:pointer;
+}
+
+.option.active{
+    background:#ff2e2e;
+    color:white;
+}
+
+.hidden{display:none;}
+
+.error{
+    color:red;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- TELA 1 -->
+<div class="card" id="tela1">
+    <h1>❤️ Você aceitaria sair comigo?</h1>
+    <button class="btn-nao" onclick="nao()">Não 😔</button>
+    <button class="btn-sim" onclick="sim()">Sim ❤️</button>
+    <p id="msg"></p>
+</div>
+
+<!-- TELA 2 -->
+<div class="card hidden" id="tela2">
+    <h2>📅 Escolha a data</h2>
+    <input type="date" id="data">
+    <button class="btn-next" onclick="next2()">Continuar</button>
+    <p class="error" id="errData"></p>
+</div>
+
+<!-- TELA 3 -->
+<div class="card hidden" id="tela3">
+    <h2>⏰ Escolha o horário</h2>
+    <input type="time" id="hora">
+    <button class="btn-next" onclick="next3()">Continuar</button>
+    <p class="error" id="errHora"></p>
+</div>
+
+<!-- TELA 4 -->
+<div class="card hidden" id="tela4">
+    <h2>🍔 O que você vai comer?</h2>
+
+    <div class="option" onclick="select(this,'Pizza')">🍕 Pizza</div>
+    <div class="option" onclick="select(this,'Hambúrguer')">🍔 Hambúrguer</div>
+    <div class="option" onclick="select(this,'Sushi')">🍣 Sushi</div>
+    <div class="option" onclick="select(this,'Churrasco')">🥩 Churrasco</div>
+
+    <button class="btn-next" onclick="next4()">Confirmar</button>
+    <p class="error" id="errComida"></p>
+</div>
+
+<!-- TELA 5 -->
+<div class="card hidden" id="tela5">
+    <h2>✨ Qual é a sua vibe?</h2>
+
+    <div class="option" onclick="selectVibe(this,'Cinema')">🎬 Cinema</div>
+    <div class="option" onclick="selectVibe(this,'Praia')">🏖 Praia</div>
+    <div class="option" onclick="selectVibe(this,'Parque')">🎡 Parque</div>
+    <div class="option" onclick="selectVibe(this,'Jantar')">🍽 Jantar</div>
+
+    <button class="btn-next" onclick="final()">Finalizar</button>
+    <p class="error" id="errVibe"></p>
+</div>
+
+<!-- FINAL -->
+<div class="card hidden" id="tela6">
+    <h2>❤️ Tudo confirmado</h2>
+    <p id="resumo"></p>
+</div>
+
+<script>
+
+let comida = "";
+let vibe = "";
+
+function nao(){
+    document.getElementById("msg").innerText="🥺 Por favor...";
+}
+
+function sim(){
+    document.getElementById("tela1").classList.add("hidden");
+    document.getElementById("tela2").classList.remove("hidden");
+}
+
+function next2(){
+
+    let data = document.getElementById("data").value;
+
+    if(data === ""){
+        document.getElementById("errData").innerText="⚠️ Escolha uma data";
+        return;
+    }
+
+    document.getElementById("tela2").classList.add("hidden");
+    document.getElementById("tela3").classList.remove("hidden");
+}
+
+function next3(){
+
+    let hora = document.getElementById("hora").value;
+
+    if(hora === ""){
+        document.getElementById("errHora").innerText="⚠️ Escolha um horário";
+        return;
+    }
+
+    document.getElementById("tela3").classList.add("hidden");
+    document.getElementById("tela4").classList.remove("hidden");
+}
+
+function select(el,val){
+    document.querySelectorAll("#tela4 .option").forEach(e=>e.classList.remove("active"));
+    el.classList.add("active");
+    comida = val;
+}
+
+function next4(){
+
+    if(comida === ""){
+        document.getElementById("errComida").innerText="⚠️ Escolha uma comida";
+        return;
+    }
+
+    document.getElementById("tela4").classList.add("hidden");
+    document.getElementById("tela5").classList.remove("hidden");
+}
+
+function selectVibe(el,val){
+    document.querySelectorAll("#tela5 .option").forEach(e=>e.classList.remove("active"));
+    el.classList.add("active");
+    vibe = val;
+}
+
+function final(){
+
+    if(vibe === ""){
+        document.getElementById("errVibe").innerText="⚠️ Escolha sua vibe";
+        return;
+    }
+
+    document.getElementById("tela5").classList.add("hidden");
+    document.getElementById("tela6").classList.remove("hidden");
+
+    let data = document.getElementById("data").value;
+    let hora = document.getElementById("hora").value;
+
+    document.getElementById("resumo").innerHTML =
+    "📅 " + data + "<br>" +
+    "⏰ " + hora + "<br>" +
+    "🍔 " + comida + "<br>" +
+    "✨ " + vibe;
+}
+
+</script>
+
+</body>
+  </html>
